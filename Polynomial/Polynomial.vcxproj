@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BA7C3039-5394-47B2-9626-43B173AC016A}</ProjectGuid>
+    <ProjectGuid>{3953BD42-57CC-45DF-A6B6-D904281699E6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Multionmial</RootNamespace>
+    <RootNamespace>Polynomial</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -142,7 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="IntMult.h" />
+    <ClCompile Include="..\Multionmial\TODO.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Polynomial.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

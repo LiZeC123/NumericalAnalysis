@@ -15,7 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IntMult.h">
+    <ClCompile Include="..\Multionmial\TODO.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Polynomial.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
