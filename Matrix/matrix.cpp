@@ -1,3 +1,4 @@
+#include "matrix.h"
 //#include "Matrix.h"
 //#include <fstream>
 //#include <sstream>

@@ -85,5 +85,5 @@ template<typename T>
 inline DynamicMatrix<T>& DynamicMatrix<T>::Clear()
 {
 	content.clear();
-	return *this
+	return *this;
 }

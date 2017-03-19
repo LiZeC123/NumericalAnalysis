@@ -29,19 +29,45 @@
 void test()
 {
 	DynamicMatrix<int> DMc;
-	for (int i = 0; i < 100; i++) {
-		for (int j = 0; j < 100; j++) {
-			DMc.GetOne(rand());
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 2; j++) {
+			DMc.GetOne(rand()%5);
 		}
 		DMc.ReFlash();
 	}
+	Matrix<int, 3, 2> Rc(DMc);
 	
-	int s = 1 + 1;
+	DMc.Clear();
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 4; j++) {
+			DMc.GetOne(rand() % 5);
+		}
+		DMc.ReFlash();
+	}
 
-	Matrix<int, 100, 100> Rc(DMc);
-	Matrix<int, 100, 100> Mc(DMc);
+	Matrix<int, 2, 4> Mc(DMc);
 
-	auto Fc = Mc.operator*(Rc);
+	Rc.temp_display();
+	std::cout << std::endl;
+	Mc.temp_display();
+	std::cout << std::endl;
+
+	auto Fc = Rc.operator*(Mc);
+
+	Fc.temp_display();
+
+	swap(Rc, Mc);
+	Rc.temp_display();
+	std::cout << std::endl;
+	Mc.temp_display();
+	std::cout << std::endl;
+
+	//int * p = new int[2];
+	//int * q = nullptr;
+	//std::swap(p, q);
+	//if (p == nullptr) {
+	//	std::cout << "successful to swap" << std::endl;
+	//}
 }
 
 int main(int argc, char ** argv)
