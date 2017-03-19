@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3953BD42-57CC-45DF-A6B6-D904281699E6}</ProjectGuid>
+    <ProjectGuid>{16961984-404D-4F76-AC01-2AA8D47C61F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Polynomial</RootNamespace>
+    <RootNamespace>FunctionCode</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -142,12 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Fraction\Fraction.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Function.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Fraction\Fraction.h" />
-    <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="Function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

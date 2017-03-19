@@ -15,18 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Function.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fraction\Fraction.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Polynomial.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Fraction\Fraction.h">
+    <ClInclude Include="Function.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
