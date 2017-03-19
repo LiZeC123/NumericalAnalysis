@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "matrix.h"
+#include <time.h>
 //
 //using std::string; using std::istringstream;
 //using std::vector; using std::map;
@@ -25,10 +26,28 @@
 //void initCmd();
 //void DoUserCmd(std::istream &in,bool needPrompt = true);
 
+void test()
+{
+	DynamicMatrix<int> DMc;
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0; j < 100; j++) {
+			DMc.GetOne(rand());
+		}
+		DMc.ReFlash();
+	}
+	
+	int s = 1 + 1;
+
+	Matrix<int, 100, 100> Rc(DMc);
+	Matrix<int, 100, 100> Mc(DMc);
+
+	auto Fc = Mc.operator*(Rc);
+}
+
 int main(int argc, char ** argv)
 {
-	Matrix<int, 3, 3> Mc;
-	
+	srand((unsigned)time(NULL));
+	test();
 	//std::cout << "LAR Far DynamicMatrix System 3.5.0" << "(" << __DATE__ << "," << __TIME__ << ")";
 	//std::cout << "\n[MSC v." << _MSC_VER << " 32 bit(Intel)] on win32" << std::endl;
 	//initCmd();

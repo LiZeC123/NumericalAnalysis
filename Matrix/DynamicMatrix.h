@@ -17,9 +17,6 @@ public:
 	//将缓冲区的数据写入
 	DynamicMatrix<T> & ReFlash();
 
-	//将当前矩阵中的内容输出到cout
-	void ShowMatrix();
-
 	//判断是否是一个规则的矩阵
 	bool IsRegular();
 
@@ -29,15 +26,16 @@ public:
 	//判断缓冲区是否为空
 	bool IsBufEmpty();
 
-
-
 	//清空矩阵的内容
 	DynamicMatrix<T> & Clear();
+
+	//直接暴露存储容器，便于后续类对其中数据进行操作
+	std::vector<std::vector<T> > content;
 
 private:
 	//一般数据的容器
 	std::vector<T> buf;
-	std::vector<std::vector<T> > content;
+	
 
 };
 
@@ -57,14 +55,18 @@ inline DynamicMatrix<T>& DynamicMatrix<T>::ReFlash()
 }
 
 template<typename T>
-inline void DynamicMatrix<T>::ShowMatrix()
-{
-}
-
-template<typename T>
 inline bool DynamicMatrix<T>::IsRegular()
 {
-	return false;
+	if (content.empty()) {
+		return true;
+	}
+	auto colNum = content[0].size();
+	for (const auto & arow : content) {
+		if (arow.size() != colNum) {
+			return false;
+		}
+	}
+	return true;
 }
 
 template<typename T>

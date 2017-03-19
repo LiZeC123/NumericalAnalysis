@@ -15,15 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Fraction.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Handle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Handler.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="matrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -38,12 +29,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Handle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Handler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

@@ -143,16 +143,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DynamicMatrix.h" />
-    <ClInclude Include="Fraction.h" />
-    <ClInclude Include="Handle.h" />
-    <ClInclude Include="Handler.h" />
     <ClInclude Include="Math_Function.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="MatrixException.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Handle.cpp" />
-    <ClCompile Include="Handler.cpp" />
     <ClCompile Include="index.cc" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math_Function.cpp" />
