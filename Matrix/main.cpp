@@ -35,32 +35,32 @@ void test()
 		}
 		DMc.ReFlash();
 	}
-	Matrix<int, 3, 2> Rc(DMc);
+	//Matrix<int, DMc.content.size(), 2> Rc(DMc);
 	
-	DMc.Clear();
-	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 4; j++) {
-			DMc.GetOne(rand() % 5);
-		}
-		DMc.ReFlash();
-	}
+	//DMc.Clear();
+	//for (int i = 0; i < 2; i++) {
+	//	for (int j = 0; j < 4; j++) {
+	//		DMc.GetOne(rand() % 5);
+	//	}
+	//	DMc.ReFlash();
+	//}
 
-	Matrix<int, 2, 4> Mc(DMc);
+	//Matrix<int, 2, 4> Mc(DMc);
 
-	Rc.temp_display();
-	std::cout << std::endl;
-	Mc.temp_display();
-	std::cout << std::endl;
+	//Rc.temp_display();
+	//std::cout << std::endl;
+	//Mc.temp_display();
+	//std::cout << std::endl;
 
-	auto Fc = Rc.operator*(Mc);
+	//auto Fc = Rc.operator*(Mc);
 
-	Fc.temp_display();
+	//Fc.temp_display();
 
-	swap(Rc, Mc);
-	Rc.temp_display();
-	std::cout << std::endl;
-	Mc.temp_display();
-	std::cout << std::endl;
+	//swap(Rc, Mc);
+	//Rc.temp_display();
+	//std::cout << std::endl;
+	//Mc.temp_display();
+	//std::cout << std::endl;
 
 	//int * p = new int[2];
 	//int * q = nullptr;

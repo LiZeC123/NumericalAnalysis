@@ -1,8 +1,6 @@
 #include "Function.h"
 #include <iostream>
 
-//此部分代码应该从性能角度出发，尽可能考虑按照C style 编写
-
 using namespace std;
 void Lagrange_polynomial()
 {
@@ -43,8 +41,4 @@ void Lagrange_polynomial()
 	cout << "end";
 }
 
-//牛顿插值法，具体步骤待补充
-//void Newton_polynomial()
-//{
-//
-//}
+

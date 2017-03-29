@@ -23,7 +23,7 @@ public:
 	{
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				std::cout << data[i][j] << " ";
+				std::cout << (*this)[i][j] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -45,28 +45,28 @@ public:
 	Matrix<T, rows, bcols> operator*(Matrix<T, brows, bcols> &rl);
 
 	//返回内置的指针，从而实现具体的访问功能
-	//std::vector<T> operator[](unsigned int i);
+	T * operator[](unsigned int i);
+	const T * operator[](unsigned int i) const;
 
-public:
-	// 不同的参数实例化出来的类不一样，导致不同大小的二元运算符
-	//均不能访问另外一个类中的private成员
-	//考虑到实现问题，只能将数据暴露出来，避免
-	//T * data;
+private:
+	//定义[]运算符，间接访数据，从而避免直接暴露指针
 	T(*data)[cols];
 	
 };
 
-template<typename T1, typename T2, unsigned r1, unsigned c1, unsigned r2, unsigned c2 >
-inline void swap(Matrix<T1, r1, c1>& lhm, Matrix<T2, r2, c2>& rhm)
-{
-	//通过将要交换的两个模板的数据都作为模板，从而使得swap可以运行在任意的Matrix上
-	//引入标准库的swap，从而保证待交换的类没有定义swap时，也能交换
-	//因为指针类型时不一样的，所以也不能交换内存。。
-	//这个类的设计真是失败啊 :(
-	using std::swap;
-	swap(lhm.data, rhm.data);
-	
-}
+//template<typename T1, typename T2, unsigned r1, unsigned c1, unsigned r2, unsigned c2 >
+//inline void swap(Matrix<T1, r1, c1>& lhm, Matrix<T2, r2, c2>& rhm)
+//{
+//	//通过将要交换的两个模板的数据都作为模板，从而使得swap可以运行在任意的Matrix上
+//	//引入标准库的swap，从而保证待交换的类没有定义swap时，也能交换
+//	//因为指针类型时不一样的，所以也不能交换内存。。
+//	//这个类的设计真是失败啊 :(
+//	//大小不同的矩阵，本质上来说，大小本来就不是一样的，自然是不能交换的
+//	//就是使用黑科技强制交换，也会导致维数和内容不匹配
+//	using std::swap;
+//	swap(lhm.data, rhm.data);
+//	
+//}
 
 template<typename T, unsigned rows, unsigned cols>
 inline Matrix<T, rows, cols>::Matrix()
@@ -86,7 +86,7 @@ inline Matrix<T, rows, cols>::Matrix(const DynamicMatrix<T> & matrix): Matrix()
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			data[i][j] = matrix.content[i][j];
+			(*this)[i][j] = matrix.content[i][j];
 		}
 	}
 }
@@ -94,10 +94,9 @@ inline Matrix<T, rows, cols>::Matrix(const DynamicMatrix<T> & matrix): Matrix()
 template<typename T, unsigned rows, unsigned cols>
 inline Matrix<T, rows, cols>::Matrix(const Matrix<T, rows, cols>& rhm)
 {
-	data = new T[rows][cols];
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			data[i][j] = rhm.data[i][j];
+			(*this)[i][j] = rhm[i][j];
 		}
 	}
 }
@@ -110,8 +109,20 @@ inline Matrix<T, rows, cols>::~Matrix()
 }
 
 template<typename T, unsigned rows, unsigned cols>
+inline T * Matrix<T, rows, cols>::operator[](unsigned int i)
+{
+	return data[i];
+}
+
+template<typename T, unsigned rows, unsigned cols>
+inline const T * Matrix<T, rows, cols>::operator[](unsigned int i) const
+{
+	return data[i];
+}
+
+template<typename T, unsigned rows, unsigned cols>
 template<unsigned int brows, unsigned int bcols>
-inline Matrix<T, rows, bcols> Matrix<T, rows, cols>::operator*(Matrix<T, brows, bcols>& rl)
+inline Matrix<T, rows, bcols> Matrix<T, rows, cols>::operator*(Matrix<T, brows, bcols>& rhm)
 {
 	//标准的右值，需要实现相关的移动赋值和构造函数
 	Matrix<T, rows, bcols> rtn;
@@ -120,9 +131,9 @@ inline Matrix<T, rows, bcols> Matrix<T, rows, cols>::operator*(Matrix<T, brows, 
 		for (int j = 0; j < bcols; j++) {
 			T tmp = 0;
 			for (int k = 0; k < cols; k++) {
-				tmp += data[i][k] * rl.data[k][j];
+				tmp += (*this)[i][k] * rhm[k][j];
 			}
-			rtn.data[i][j] = tmp;
+			rtn[i][j] = tmp;
 		}
 	}
 
