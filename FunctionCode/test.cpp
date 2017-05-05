@@ -63,7 +63,13 @@ void testNewtonCotesMethod()
 void testRungeKuttaMethods4() 
 {
 	auto f = [](double x, double y)->double {return y - 2 * x / y; };
-	RungeKuttaMethods4(f, 0, 1, 0.2, 5);
+	RungeKuttaMethod4(f, 0, 1, 0.2, 5);
+}
+
+void testAdamsMethod4()
+{
+	auto f = [](double x, double y)->double {return y - 2 * x / y; };
+	AdamsMethod4(f, 0, 1, 0.1, 10);
 }
 
 void testEulerMethod()
@@ -99,6 +105,8 @@ int main()
 
 	//testEulerMethod();
 	//testRungeKuttaMethods4();
+	//cout << endl;
+	testAdamsMethod4();
 
 	//testMathIter();
 	

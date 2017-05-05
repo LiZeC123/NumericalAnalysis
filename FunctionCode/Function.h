@@ -219,7 +219,7 @@ inline void EulerMethod(Fun f, double x0, double y0, double h, double N)
 [异常]	：无
 ****************************/
 template<typename Fun>
-inline void RungeKuttaMethods4(Fun f, double x0, double y0, double h, double N) 
+inline void RungeKuttaMethod4(Fun f, double x0, double y0, double h, double N) 
 {
 	int n = 1;
 	double x1, y1, K1, K2, K3, K4;
@@ -247,53 +247,80 @@ inline void RungeKuttaMethods4(Fun f, double x0, double y0, double h, double N)
 }
 
 
-///***************************
-//[函数]	：常微分方程数值求解，亚当姆斯预报-校正系统
-//[参数]	：f：关于x和y的函数；x0，y0：初始值；h：步长；N：计算点数
-//[返回值]：无
-//[异常]	：无
-//****************************/
-//template<typename Fun>
-//inline void RungeKuttaMethods4(Fun f, double x0, double y0, double h, double N)
-//{
-//	double x[4]; double y[4];
-//	int n = 1;
-//	double x1, y1, K1, K2, K3, K4;
-//	do
-//	{
-//		x1 = x0 + h;
-//
-//		K1 = f(x0, y0);
-//		K2 = f(x0 + h / 2, y0 + h*K1 / 2);
-//		K3 = f(x0 + h / 2, y0 + h*K2 / 2);
-//		K4 = f(x1, y0 + h*K3);
-//
-//		y1 = y0 + (K1 + 2 * K2 + 2 * K3 + K4)*h / 6;
-//
-//		//printf("%.4f %.4f\n", x1, y1);
-//		x[n] = x1;
-//		y[n] = y1;
-//
-//		if (n == 3) {
-//			break;
-//		}
-//		else {
-//			n++;
-//			x0 = x1; y0 = y1;
-//		}
-//	} while (true);
-//
-//	n = 4;
-//	double x4, y4,dy4;
-//	double yp, dyp;
-//	do
-//	{
-//		x4 = x[3] + h;
-//		yp = y[3]+h*(55)
-//	} while (true);
-//
-//
-//}
+/***************************
+[函数]	：常微分方程数值求解，亚当姆斯预报-校正系统
+[参数]	：f：关于x和y的函数；x0，y0：初始值；h：步长；N：计算点数
+[返回值]：无
+[异常]	：无
+****************************/
+template<typename Fun>
+inline void AdamsMethod4(Fun f, double x0, double y0, double h, double N)
+{
+	double x[5]; double y[5];
+	x[0] = x0; y[0] = y0;
+
+	int n = 1;
+	double xi, yi, K1, K2, K3, K4;
+	do
+	{
+		xi = x0 + h;
+
+		K1 = f(x0, y0);
+		K2 = f(x0 + h / 2, y0 + h*K1 / 2);
+		K3 = f(x0 + h / 2, y0 + h*K2 / 2);
+		K4 = f(xi, y0 + h*K3);
+
+		yi = y0 + (K1 + 2 * K2 + 2 * K3 + K4)*h / 6;
+
+		x[n] = xi;
+		y[n] = yi;
+
+		if (n == 3) {
+			break;
+		}
+		else {
+			n++;
+			x0 = xi; y0 = yi;
+		}
+	} while (true);
+	
+	double dy[5];
+	for (int i = 0; i < 4; i++) {
+		dy[i] = f(x[i], y[i]);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		printf("%.5f\t%.5f\n", x[i], y[i]);
+	}
+
+	n = 4;
+
+	double yp, dyp;
+	do
+	{
+		x[4] = x[3] + h;
+		yp = y[3] + h*(55 * dy[3] - 59 * dy[2] + 37 * dy[1] - 9 * dy[0]) / 24;
+		dyp = f(x[4], yp);
+		y[4] = y[3] + h*(9 * dyp + 19 * dy[3] - 5 * dy[2] + dy[1]) / 24;
+		dy[4] = f(x[4], y[4]);
+		printf("%.5f\t%.5f\n", x[4], y[4]);
+
+		if (n == N) {
+			break;
+		}
+		else {
+			n++;
+			x[3] = x[4];
+			y[3] = y[4];
+
+			for (int k = 0; k < 4; k++) {
+				dy[k] = dy[k + 1];
+			}
+		}
+	} while (true);
+
+
+}
 
 /***************************
 [函数]	：迭代法求方程根
