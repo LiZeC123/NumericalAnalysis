@@ -345,3 +345,38 @@ inline double mathIter(Fun f, double x)
 
 	return x1;
 }
+
+/***************************
+[函数]	：迭代法求方程根,艾特金加速方法
+[参数]	：f：迭代函数；x0初始估计点
+[返回值]：迭代结果值
+[异常]	：迭代结果不收敛，则抛出logic_error异常
+****************************/
+template<typename Fun>
+inline double AitkenIter(Fun f, double x0) 
+{
+	const static int N = 100000;
+	const static double e = 0.0000001;
+
+	int k = 1;
+	double x1, x2;
+
+	do
+	{
+		x1 = f(x0);
+		x2 = f(x1);
+		x2 = x2 - (x2 - x1)*(x2 - x1) / (x2 - 2 * x1 + x0);
+		if (abs(x1 - x2) < e) {
+			break;
+		}
+		else if (k == N) {
+			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
+		}
+		else {
+			k++;
+			x0 = x2;
+		}
+	} while (true);
+
+	return x2;
+}

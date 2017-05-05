@@ -81,17 +81,30 @@ void testEulerMethod()
 
 void testMathIter() 
 {
+	auto f = [](double x)->double {return sqrt(x + 1); };
 	try
 	{
-		double a = mathIter([](double x)->double {return sqrt(x + 1); }, 1);
+		auto a = mathIter(f, 1);
 		printf("%.7f\n",a);
 	}
 	catch (const std::exception&e)
 	{
 		cout << e.what();
 	}
-	
-	
+}
+
+void testAitkenIter()
+{
+	auto f = [](double x)-> double {return exp(-x); };
+	try
+	{
+		auto r = AitkenIter(f, 0.5);
+		printf("%.7f\n", r);
+	}
+	catch (const std::exception&e)
+	{
+		cout << e.what();
+	}
 }
 
 int main()
@@ -106,9 +119,10 @@ int main()
 	//testEulerMethod();
 	//testRungeKuttaMethods4();
 	//cout << endl;
-	testAdamsMethod4();
+	//testAdamsMethod4();
 
 	//testMathIter();
-	
+	testAitkenIter();
+
 	return 0;
 }
