@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//特殊处理的函数，避免在x=0时产生NaN
 double f(double x)
 {
 	if (x == 0) {
@@ -14,23 +15,92 @@ double f(double x)
 	}
 }
 
-double g(double x)
+void testLarange()
 {
-	static double s[] = { 1.0,0.9973978,0.9896158,0.9767267,0.9588510,0.9361556,0.9088516,0.8771925,0.8414709 };
-	int i = x * 8;
-	return s[i];
+	cout << "请输入插值点个数" << endl;
+	int n;
+	cin >> n;
+
+	double* x = new double[n];
+	double* y = new double[n];
+	cout << "请依次输入插值点，每行一组数据，格式为 x y" << endl;
+	for (int i = 0; i < n; i++) {
+		cin >> x[i] >> y[i];
+	}
+
+	double gx;
+	cout << "请输入待估计函数值:";
+	cin >> gx;
+
+	double gy = LagrangePolynomial(x, y, n,gx);
+
+	cout << "待估节点值为：" << gy << endl;
+
+	delete[] x;
+	delete[] y;
+
+	cout << "end";
+}
+
+void testCompoundSimpson()
+{
+	auto r = CompoundSimpson(0, 1, 10, f);
+	printf("The Answer of CompoundSimpson is %.7f\n", r);
+}
+
+void testTrapezoidMethod()
+{
+	auto r = TrapezoidMethod(0, 1, 0.0000001, f);
+	printf("The Answer of TrapezoidMethod is %.7f\n", r);
+}
+
+void testNewtonCotesMethod()
+{
+	auto r = NewtonCotesMethod(0, 1, 0.0000001, f);
+	printf("The Answer of NewtonCotesMethod is %.7f\n", r);
+}
+
+void testRungeKuttaMethods4() 
+{
+	auto f = [](double x, double y)->double {return y - 2 * x / y; };
+	RungeKuttaMethods4(f, 0, 1, 0.2, 5);
+}
+
+void testEulerMethod()
+{
+	auto f = [](double x, double y)->double {return y - 2 * x / y; };
+	EulerMethod(f, 0, 1, 0.1, 10);
+}
+
+
+void testMathIter() 
+{
+	try
+	{
+		double a = mathIter([](double x)->double {return sqrt(x + 1); }, 1);
+		printf("%.7f\n",a);
+	}
+	catch (const std::exception&e)
+	{
+		cout << e.what();
+	}
+	
+	
 }
 
 int main()
 {
-	double h = 1.0 / 8;
-	for (double i = h; i < 2; i += h) {
-		cout << f(i) << endl;
-	}
-	double s = Compound_Simpson(0, 1, 10240, f);
-	printf("%.10f", s);
+
+	//testLarange()
 	
-	//double s = Romberg(0, 1, 0.001, f);
-	//cout << s;
+	//testCompoundSimpson();
+	//testTrapezoidMethod();
+	//testNewtonCotesMethod();
+
+	//testEulerMethod();
+	//testRungeKuttaMethods4();
+
+	//testMathIter();
+	
 	return 0;
 }
