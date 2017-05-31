@@ -198,8 +198,6 @@ void testJacobiMethod()
 	{
 		cout << e.what();
 	}
-
-	printf("\n");
 }
 
 void testGaussSeidelMethod()
@@ -220,8 +218,6 @@ void testGaussSeidelMethod()
 	{
 		cout << e.what();
 	}
-
-	printf("\n");
 }
 
 void testJordanMethod()
@@ -237,6 +233,20 @@ void testJordanMethod()
 	for (int i = 0; i < 3; i++) {
 		printf("x[%d] = %.5f ", i, b[i]);
 	}
+}
+
+void testGaussMethod()
+{
+	double A[][3] = { { 10,-1,-2 },{ -1,10,-2 },{ -1,-1,5 } };
+	double b[] = { 7.2,8.3,4.2 };
+
+	printf("\n高斯消去法计算结果\n");
+	GaussMethod(A, b);
+
+	for (int i = 0; i < 3; i++) {
+		printf("x[%d] = %.5f ", i, b[i]);
+	}
+
 }
 
 整型 主函数()
@@ -273,12 +283,15 @@ void testJordanMethod()
 		testJacobiMethod();
 		testGaussSeidelMethod();
 		testJordanMethod();
+		testGaussMethod();
 	否则
 		标准输出 输出 "计算sin(x)/x在区间[0,1]上的积分\n";
 		testCompoundSimpson();
 		testTrapezoidMethod();
 		testRombrgMethod();	
 	结束
+
+	标准输出 输出 标准换行;
 
 	返回 0;
 }

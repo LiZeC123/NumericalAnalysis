@@ -761,7 +761,7 @@ inline void GaussSeidelMethod(double A[][n], double* b, double* ansewr, double e
 
 /***************************
 [函数]	：消去法求方程组,约当消去公式
-[参数]	：A：系数矩阵；b：右侧值向量；ansewr：保存返回结果的数组；e:计算精度；N：最大迭代次数
+[参数]	：A：系数矩阵；b：右侧值向量；
 [返回值]：无，通过b返回结果向量
 [异常]	：无
 ****************************/
@@ -787,6 +787,62 @@ inline void JordanMethod(double A[][n], double* b)
 		}
 
 	}
-
-	
 }
+
+/***************************
+[函数]	：消去法求方程组,高斯消去公式
+[参数]	：A：系数矩阵；b：右侧值向量；
+[返回值]：无，通过b返回结果向量
+[异常]	：无
+****************************/
+template<unsigned n>
+inline void GaussMethod(double A[][n], double* b)
+{
+	for (int k = 0; k < n; k++) {
+		//选主元素
+		double d = A[k][k];
+		int l = k;
+		int i = k + 1;
+
+		for (int i = k + 1; i < n; i++) {
+			if (abs(A[i][k]) > d) {
+				d = A[i][k];
+				l = i;
+			}
+		}
+
+		if (d == 0) {
+			throw std::logic_error("无法选择非零主元");
+		}
+
+		if (l != k) {
+			for (int j = k; j < n; j++) {
+				std::swap(A[l][j], A[k][j]);
+			}
+			std::swap(b[k], b[l]);
+		}
+
+			
+
+		//消除
+		for (int j = k + 1; j < n; j++) {
+			A[k][j] /= A[k][k];
+		}
+		b[k] /= A[k][k];
+
+		for (int i = k + 1; i < n; i++) {
+			for (int j = k + 1; j < n; j++) {
+				A[i][j] -= (A[i][k] * A[k][j]);
+			}
+			b[i] -= (A[i][k] * b[k]);
+		}
+	}
+
+	//回代
+	for (int i = n - 2; i >= 0; i--) {
+		for (int j = i + 1; j < n; j++) {
+			b[i] -= (A[i][j] * b[j]);
+		}
+	}
+}
+
