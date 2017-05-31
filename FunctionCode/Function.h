@@ -46,6 +46,52 @@ inline double LagrangePolynomial(double x[], double y[], int n, double gx)
 
 
 /***************************
+[函数]	：插值方法，牛顿插值
+[参数]	：插值点x数据；插值点y数据，插值点个数，估计点x值
+[返回值]：插值函数在估计点处的函数值
+[异常]	：无
+****************************/
+inline double NewtonPolynomial(double x[], double y[], int n, double gx) 
+{
+	using pointer = double*;
+	pointer* dy = new pointer[n];
+
+	//为差分表分配空间
+	for (int i = 0; i < n; i++) {
+		dy[i] = new double[n - i];
+	}
+
+	//为便于统一操作，将y0复制到dy的第0行
+	for (int i = 0; i < n; i++) {
+		dy[0][i] = y[i];
+	}
+
+	for (int i = 1; i < n; i++) {
+		for (int j = 0; j < n - i; j++) {
+			//每一级差商等于相邻的前一级差商之差除以对应的x值
+			dy[i][j] = (dy[i - 1][j + 1] - dy[i - 1][j]) / (x[j + i] - x[j]);
+		}
+	}
+
+	//最后值等于每一级差商中0号元素的值与相应的多项式相乘
+	double gy = y[0];
+	for (int i = 1; i < n; i++) {
+		double ty = 1;
+		for (int j = 0; j < i; j++) {
+			ty *= (gx - x[j]);
+		}
+		gy += dy[i][0] * ty;
+	}
+
+	for (int i = 0; i < n; i++) {
+		delete[] dy[i];
+	}
+	delete[] dy;
+
+	return gy;
+}
+
+/***************************
 [函数]	：数值积分，复化辛普森公式
 [参数]	：积分下限；积分上限；函数点个数；积分函数
 [返回值]：指定区间上的积分值
@@ -118,13 +164,13 @@ inline double TrapezoidMethod(double a, double b, double e, Fun f)
 
 
 /***************************
-[函数]	：数值积分，牛顿-科斯特方法
+[函数]	：数值积分，龙贝格方法
 [参数]	：积分下限；积分上限；积分精度；积分函数
 [返回值]：指定区间上的积分结果
 [异常]	：无
 ****************************/
 template<typename Fun>
-inline double NewtonCotesMethod(double a, double b, double e, Fun f)
+inline double RombrgMethod(double a, double b, double e, Fun f)
 {
 	double h = b - a;
 	double T1 = (h / 2)*(f(a) + f(b));
@@ -190,15 +236,41 @@ inline double NewtonCotesMethod(double a, double b, double e, Fun f)
 
 }
 
-
 /***************************
 [函数]	：常微分方程数值求解，欧拉方法
 [参数]	：f：关于x和y的函数；x0，y0：初始值；h：步长；N：计算点数
 [返回值]：无
 [异常]	：无
+[其他]  ：此方法因精度较低，不建议使用
 ****************************/
 template<typename Fun>
-inline void EulerMethod(Fun f, double x0, double y0, double h, double N) 
+inline void EulerMethod(Fun f, double x0, double y0, double h, double N)
+{
+	int n = 1;
+	double x1, y1;
+	do {
+		x1 = x0 + h;
+		y1 = y0 + h*f(x0, y0);
+		printf("%.4f %.4f\n", x1, y1);
+
+		if (n == N) {
+			break;
+		}
+		else {
+			n++;
+			x0 = x1; y0 = y1;
+		}
+	} while (true);
+}
+
+/***************************
+[函数]	：常微分方程数值求解，改进欧拉方法
+[参数]	：f：关于x和y的函数；x0，y0：初始值；h：步长；N：计算点数
+[返回值]：无
+[异常]	：无
+****************************/
+template<typename Fun>
+inline void ImprvEulerMethod(Fun f, double x0, double y0, double h, double N) 
 {
 	int n = 1;
 	double x1,yp,yc,y1;
@@ -381,7 +453,7 @@ inline void AdamsMethod4(Fun f, double x0, double y0, double h, double N)
 	}
 
 	for (int i = 0; i < 4; i++) {
-		printf("%.5f\t%.5f\n", x[i], y[i]);
+		printf("%.4f\t%.4f\n", x[i], y[i]);
 	}
 
 	n = 4;
@@ -394,7 +466,7 @@ inline void AdamsMethod4(Fun f, double x0, double y0, double h, double N)
 		dyp = f(x[4], yp);
 		y[4] = y[3] + h*(9 * dyp + 19 * dy[3] - 5 * dy[2] + dy[1]) / 24;
 		dy[4] = f(x[4], y[4]);
-		printf("%.5f\t%.5f\n", x[4], y[4]);
+		printf("%.4f\t%.4f\n", x[4], y[4]);
 
 		if (n == N) {
 			break;
@@ -411,6 +483,36 @@ inline void AdamsMethod4(Fun f, double x0, double y0, double h, double N)
 	} while (true);
 
 
+}
+
+/***************************
+[函数]	：二分法求方程根
+[参数]	：f：迭代函数；a，b：区间端点值；e：精度
+[返回值]：迭代结果值
+[异常]	：无
+****************************/
+template<typename Fun>
+inline double dichotomy(Fun f, double a, double b, double e)
+{
+	double y0 = f(a);
+	double x, y;
+
+	do
+	{
+		x = (a + b) / 2;
+		y = f(x);
+		if (y*y0 > 0) {
+			a = x;
+		}
+		else {
+			b = x;
+		}
+
+		if (b - a < e) {
+			break;
+		}
+	} while (true);
+	return x;
 }
 
 
@@ -430,7 +532,7 @@ inline double mathIter(Fun f, double x,double e = 0.0000001,int N = 10000000)
 		if (k == N) {
 			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
 		}
-		printf("%.4f ", x1);
+		//printf("%.4f ", x1);
 	}
 
 	return x1;
@@ -477,7 +579,7 @@ inline double AitkenIter(Fun f, double x0, double e = 0.0000001, int N = 1000000
 [异常]	：迭代结果不收敛或导数值为零，则抛出logic_error异常
 ****************************/
 template<typename Fun1,typename Fun2>
-inline double NewtonMethod(Fun1 f, Fun2 Df, double x0, double e = 0.0000001, int N = 10000000)
+inline double NewtonMethod(Fun1 f, Fun2 Df, double x0, double e = 0.0000001, int N = 1000000)
 {
 	int k = 1;
 	double x1;
@@ -512,7 +614,7 @@ inline double NewtonMethod(Fun1 f, Fun2 Df, double x0, double e = 0.0000001, int
 [异常]	：迭代结果不收敛，则抛出logic_error异常
 ****************************/
 template<typename Fun>
-inline double qSecantMethod(Fun f, double x0,double x1, double e = 0.0000001, int N = 10000000)
+inline double qSecantMethod(Fun f, double x0,double x1, double e = 0.0000001, int N = 1000000)
 {
 	int k = 1;
 	double x2;
@@ -533,4 +635,158 @@ inline double qSecantMethod(Fun f, double x0,double x1, double e = 0.0000001, in
 	} while (true);
 
 	return x2;
+}
+
+/***************************
+[函数]	：迭代法求方程组,雅克比迭代公式
+[参数]	：A：系数矩阵；b：右侧值向量；ansewr：保存返回结果的数组；e:计算精度；N：最大迭代次数
+[返回值]：无，通过answer返回结果向量
+[异常]	：迭代结果不收敛，则抛出logic_error异常
+****************************/
+template<unsigned n>
+inline void JacobiMethod(double A[][n], double* b, double* ansewr, double e = 0.00001,double N = 1000000)
+{
+	double* x = new double[n];
+	double* y = new double[n];
+
+	for (int i = 0; i < n; i++) {
+		x[i] = y[i] = 0;
+	}
+
+	int k = 1;
+	do
+	{
+		for (int i = 0; i < n; i++) {
+			double temp = 0;
+			for (int j = 0; j < n; j++) {
+				if (j != i) {
+					temp += A[i][j]*x[j];
+				}
+			}
+			y[i] = (b[i] - temp) / A[i][i];
+		}
+
+		bool needReturn = true;
+		for (int i = 0; i < n; i++) {
+			if (abs(x[i] - y[i]) >= e) {
+				needReturn = false;
+				break;
+			}
+		}
+
+		if (needReturn) {
+			break;
+		}
+
+		if (k == N) {
+			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
+		}
+		else {
+			k++;
+			for(int i=0;i<n;i++){
+				x[i] = y[i];
+			}
+		}
+		
+	} while (true);
+
+	for (int i = 0; i < n; i++) {
+		ansewr[i] = y[i];
+	}
+
+	delete[] x;
+	delete[] y;
+}
+
+/***************************
+[函数]	：迭代法求方程组,高斯-赛德尔迭代公式
+[参数]	：A：系数矩阵；b：右侧值向量；ansewr：保存返回结果的数组；e:计算精度；N：最大迭代次数
+[返回值]：无，通过answer返回结果向量
+[异常]	：迭代结果不收敛，则抛出logic_error异常
+****************************/
+template<unsigned n>
+inline void GaussSeidelMethod(double A[][n], double* b, double* ansewr, double e = 0.00001, double N = 1000000)
+{
+	double* x = new double[n];
+	double* y = new double[n];
+
+	for (int i = 0; i < n; i++) {
+		x[i] = y[i] = 0;
+	}
+
+	int k = 1;
+	do
+	{
+		for (int i = 0; i < n; i++) {
+			double temp = 0;
+			for (int j = 0; j < n; j++) {
+				if (j != i) {
+					temp += A[i][j] * x[j];
+				}
+			}
+			x[i] = (b[i] - temp) / A[i][i];
+		}
+
+		bool needReturn = true;
+		for (int i = 0; i < n; i++) {
+			if (abs(x[i] - y[i]) >= e) {
+				needReturn = false;
+				break;
+			}
+		}
+
+		if (needReturn) {
+			break;
+		}
+
+		if (k == N) {
+			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
+		}
+		else {
+			k++;
+			for (int i = 0; i<n; i++) {
+				y[i] = x[i];
+			}
+		}
+
+	} while (true);
+
+	for (int i = 0; i < n; i++) {
+		ansewr[i] = y[i];
+	}
+
+	delete[] x;
+	delete[] y;
+}
+
+/***************************
+[函数]	：消去法求方程组,约当消去公式
+[参数]	：A：系数矩阵；b：右侧值向量；ansewr：保存返回结果的数组；e:计算精度；N：最大迭代次数
+[返回值]：无，通过b返回结果向量
+[异常]	：无
+****************************/
+template<unsigned n>
+inline void JordanMethod(double A[][n], double* b)
+{
+	int k = 0;
+
+	for (int k = 0; k < n; k++) {
+		for (int j = k + 1; j < n; j++) {
+			A[k][j] /= A[k][k];	
+		}
+		b[k] /= A[k][k];
+
+		for (int i = 0; i < n; i++) {
+			if (i != k)
+			{
+				for (int j = k + 1; j < n; j++) {
+					A[i][j] -= (A[i][k] * A[k][j]);
+				}
+				b[i] -= (A[i][k] * b[k]);
+			}
+		}
+
+	}
+
+	
 }

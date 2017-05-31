@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Elanguage.h" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
