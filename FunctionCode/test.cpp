@@ -241,12 +241,17 @@ void testGaussMethod()
 	double b[] = { 7.2,8.3,4.2 };
 
 	printf("\n高斯消去法计算结果\n");
-	GaussMethod(A, b);
-
-	for (int i = 0; i < 3; i++) {
-		printf("x[%d] = %.5f ", i, b[i]);
+	try
+	{
+		GaussMethod(A, b);
+		for (int i = 0; i < 3; i++) {
+			printf("x[%d] = %.5f ", i, b[i]);
+		}
 	}
-
+	catch (const std::exception&e)
+	{
+		cout << e.what();
+	}
 }
 
 整型 主函数()

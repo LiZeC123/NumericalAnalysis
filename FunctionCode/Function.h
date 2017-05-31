@@ -793,7 +793,7 @@ inline void JordanMethod(double A[][n], double* b)
 [函数]	：消去法求方程组,高斯消去公式
 [参数]	：A：系数矩阵；b：右侧值向量；
 [返回值]：无，通过b返回结果向量
-[异常]	：无
+[异常]	：无法选择合适的主元，抛出logic_error异常
 ****************************/
 template<unsigned n>
 inline void GaussMethod(double A[][n], double* b)
