@@ -103,19 +103,12 @@ inline double CompoundSimpson(double a, double b, int n, Func f)
 	double h = (b - a) / n;
 	double S = f(a) - f(b);
 	double x = a;
-	int k = 1;
-	while (true)
-	{
+
+	for (int k = 0; k < n; k++) {
 		x += h / 2;
 		S += 4 * f(x);
-		x += h / 2;	
+		x += h / 2;
 		S += 2 * f(x);
-		if (k == n) {
-			break;
-		}
-		else {
-			k++;
-		}
 	}
 
 	S *= (h / 6);
@@ -272,24 +265,14 @@ inline void EulerMethod(Fun f, double x0, double y0, double h, double N)
 template<typename Fun>
 inline void ImprvEulerMethod(Fun f, double x0, double y0, double h, double N) 
 {
-	int n = 1;
 	double x1,yp,yc,y1;
-	do
-	{
+	for (int n = 0; n < N; n++, x0 = x1, y0 = y1) {
 		x1 = x0 + h;
 		yp = y0 + h*f(x0, y0);
 		yc = y0 + h*f(x1, yp);
 		y1 = (yp + yc) / 2;
 		printf("%.4f %.4f\n", x1, y1);
-
-		if (n == N) {
-			break;
-		}
-		else {
-			n++;
-			x0 = x1; y0 = y1;
-		}
-	} while (true);
+	}
 }
 
 
@@ -302,10 +285,8 @@ inline void ImprvEulerMethod(Fun f, double x0, double y0, double h, double N)
 template<typename Fun>
 inline void RungeKuttaMethod4(Fun f, double x0, double y0, double h, double N) 
 {
-	int n = 1;
 	double x1, y1, K1, K2, K3, K4;
-	do
-	{
+	for (int n = 0; n < N; n++, x0 = x1, y0 = y1) {
 		x1 = x0 + h;
 
 		K1 = f(x0, y0);
@@ -314,17 +295,9 @@ inline void RungeKuttaMethod4(Fun f, double x0, double y0, double h, double N)
 		K4 = f(x1, y0 + h*K3);
 
 		y1 = y0 + (K1 + 2 * K2 + 2 * K3 + K4)*h / 6;
-		
-		printf("%.4f %.4f\n", x1, y1);
 
-		if (n == N) {
-			break;
-		}
-		else {
-			n++;
-			x0 = x1; y0 = y1;
-		}
-	} while (true);
+		printf("%.4f %.4f\n", x1, y1);
+	}
 }
 
 
@@ -581,29 +554,18 @@ inline double AitkenIter(Fun f, double x0, double e = 0.0000001, int N = 1000000
 template<typename Fun1,typename Fun2>
 inline double NewtonMethod(Fun1 f, Fun2 Df, double x0, double e = 0.0000001, int N = 1000000)
 {
-	int k = 1;
 	double x1;
-	do
-	{
+	for (int k = 0; k < N; k++, x0 = x1) {
 		if (Df(x0) == 0) {
 			throw std::logic_error("函数导数值为零");
 		}
 
 		x1 = x0 - f(x0) / Df(x0);
 		if (abs(x1 - x0) < e) {
-			break;
+			return x1;
 		}
-
-		if (k == N) {
-			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
-		}
-
-		k++;
-		x0 = x1;
-		//printf("%.4f ", x1);
-	} while (true);
-	
-	return x1;
+	}
+	throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
 }
 
 

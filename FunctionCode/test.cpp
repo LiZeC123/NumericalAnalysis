@@ -256,6 +256,10 @@ void testGaussMethod()
 
 整型 主函数()
 {
+
+	auto f = [](double x)->double {return 1 / (x*pow((x*x - 3 * x + 2), 1 / 3.0)); };
+	//CompoundSimpson
+
 	常数 实验一 赋值为 1;
 	常数 实验二 赋值为 2;
 	常数 实验三 赋值为 3;
