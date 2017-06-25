@@ -642,6 +642,7 @@ inline void JacobiMethod(double A[][n], double* b, double* ansewr, double e = 0.
 
 		if (k == N) {
 			throw std::logic_error("达到最大迭代次数，且未能到达精度要求");
+			//存在内存泄露的风险
 		}
 		else {
 			k++;
